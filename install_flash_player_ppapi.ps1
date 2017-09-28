@@ -1,10 +1,10 @@
 Clear-host
-# Присваивание переменных
+# ГЏГ°ГЁГ±ГўГ ГЁГўГ Г­ГЁГҐ ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»Гµ
 $Software = "Adobe Flash Player Chromium PPAPI"
 $DistribPath = '.\'
 $FileName = 'install_flash_player_ppapi.exe'
 
-# Получаем ссылку на скачивание. Она всегда одинакова.
+# ГЏГ®Г«ГіГ·Г ГҐГ¬ Г±Г±Г»Г«ГЄГі Г­Г  Г±ГЄГ Г·ГЁГўГ Г­ГЁГҐ. ГЋГ­Г  ГўГ±ГҐГЈГ¤Г  Г®Г¤ГЁГ­Г ГЄГ®ГўГ .
 $DownLoadURL = "https://fpdownload.macromedia.com/pub/flashplayer/latest/help/install_flash_player_ppapi.exe"
 Write-Host "-===========-" -ForegroundColor Green
 Write-Host "Product: $Software"
@@ -12,16 +12,16 @@ Write-Host "Product: $Software"
 if (Test-Path "$DistribPath\$FileName")
 {
     $ver1 = ((dir $DistribPath -Filter $FileName -ErrorAction Silentlycontinue).versioninfo).fileversion
-    write-host "Существующая версия файла - $ver1"
+    write-host "Г‘ГіГ№ГҐГ±ГІГўГіГѕГ№Г Гї ГўГҐГ°Г±ГЁГї ГґГ Г©Г«Г  - $ver1"
     if (!(Test-Path "$DistribPath\temp\$FileName"))
     {
         New-Item -Path $DistribPath\temp -ItemType "directory" -ErrorAction Silentlycontinue |out-null
         write-host
     }
-	# Указываем куда будем сохранять скачиваемый файл
+	# Г“ГЄГ Г§Г»ГўГ ГҐГ¬ ГЄГіГ¤Г  ГЎГіГ¤ГҐГ¬ Г±Г®ГµГ°Г Г­ГїГІГј Г±ГЄГ Г·ГЁГўГ ГҐГ¬Г»Г© ГґГ Г©Г«
 	$destination = "$DistribPath\temp\$FileName"
-    # Скачивание файла
-    write-host "Скачиваем файл с сервера"
+    # Г‘ГЄГ Г·ГЁГўГ Г­ГЁГҐ ГґГ Г©Г«Г 
+    write-host "Г‘ГЄГ Г·ГЁГўГ ГҐГ¬ ГґГ Г©Г« Г± Г±ГҐГ°ГўГҐГ°Г "
     $wc = New-Object System.Net.WebClient
     $wc.DownloadFile($DownLoadURL, $destination)
     $ver2 = ((dir $DistribPath\temp -Filter $FileName -ErrorAction Silentlycontinue).versioninfo).fileversion
@@ -29,13 +29,13 @@ if (Test-Path "$DistribPath\$FileName")
 	$hash2 = Get-FileHash $DistribPath\temp\$FileName -Algorithm MD5 |select -exp hash
 	if ($hash1 -eq $hash2)
 	{
-		write-host "Подтверждаю, что файл на сервере не обновился"
+		write-host "ГЏГ®Г¤ГІГўГҐГ°Г¦Г¤Г Гѕ, Г·ГІГ® ГґГ Г©Г« Г­Г  Г±ГҐГ°ГўГҐГ°ГҐ Г­ГҐ Г®ГЎГ­Г®ГўГЁГ«Г±Гї"
 		del $DistribPath\temp -Recurse
 	}
 	else
 	{
-		Write-warning "Файл на сервере обновился"
-        write-host "Новая версия файла - $ver2"
+		Write-warning "Г”Г Г©Г« Г­Г  Г±ГҐГ°ГўГҐГ°ГҐ Г®ГЎГ­Г®ГўГЁГ«Г±Гї"
+        write-host "ГЌГ®ГўГ Гї ГўГҐГ°Г±ГЁГї ГґГ Г©Г«Г  - $ver2"
         try
         {
             Move-Item $DistribPath\temp\$FileName -Destination $DistribPath -Force
