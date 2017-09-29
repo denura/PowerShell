@@ -1,16 +1,16 @@
 Clear-host
-# Присваивание переменных
+# ГЏГ°ГЁГ±ГўГ ГЁГўГ Г­ГЁГҐ ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»Гµ
 $Software = "Firefox ESR"
 $DistribPath = '.\'
 $FileName = 'Firefox Setup esr.exe'
 #$URLPage = 'https://www.mozilla.org/ru/firefox/organizations/all/#ru'
 
-# Получаем ссылку на скачивание. Она всегда одинакова.
+# ГЏГ®Г«ГіГ·Г ГҐГ¬ Г±Г±Г»Г«ГЄГі Г­Г  Г±ГЄГ Г·ГЁГўГ Г­ГЁГҐ. ГЋГ­Г  ГўГ±ГҐГЈГ¤Г  Г®Г¤ГЁГ­Г ГЄГ®ГўГ .
 $DownLoadURL = "https://download.mozilla.org/?product=firefox-esr-latest&os=win64&lang=ru"
 Write-Host "-===========-" -ForegroundColor Green
 Write-Host "Product:  $Software"
 	
-# Создаём папку куда будем скачивать дистибутив
+# Г‘Г®Г§Г¤Г ВёГ¬ ГЇГ ГЇГЄГі ГЄГіГ¤Г  ГЎГіГ¤ГҐГ¬ Г±ГЄГ Г·ГЁГўГ ГІГј Г¤ГЁГ±ГІГЁГЎГіГІГЁГў
 if (Test-Path "$DistribPath\$FileName")
 {
     $ver1 = ((dir $DistribPath -Filter $FileName -ErrorAction Silentlycontinue).versioninfo).fileversion
@@ -19,22 +19,22 @@ if (Test-Path "$DistribPath\$FileName")
         New-Item -Path $DistribPath\temp -ItemType "directory" -ErrorAction Silentlycontinue |out-null
         write-host
     }
-	# Указываем куда будем сохранять скачиваемый файл
+	# Г“ГЄГ Г§Г»ГўГ ГҐГ¬ ГЄГіГ¤Г  ГЎГіГ¤ГҐГ¬ Г±Г®ГµГ°Г Г­ГїГІГј Г±ГЄГ Г·ГЁГўГ ГҐГ¬Г»Г© ГґГ Г©Г«
 	$destination = "$DistribPath\temp\$FileName"
-    # Скачивание файла
-    write-host "Скачиваем файл с сервера"
+    # Г‘ГЄГ Г·ГЁГўГ Г­ГЁГҐ ГґГ Г©Г«Г 
+    write-host "Г‘ГЄГ Г·ГЁГўГ ГҐГ¬ ГґГ Г©Г« Г± Г±ГҐГ°ГўГҐГ°Г "
     $wc = New-Object System.Net.WebClient
     $wc.DownloadFile($DownLoadURL, $destination)
 	$hash1 = Get-FileHash $DistribPath\$FileName -Algorithm MD5 |select -exp hash
 	$hash2 = Get-FileHash $DistribPath\temp\$FileName -Algorithm MD5 |select -exp hash
 	if ($hash1 -eq $hash2)
 	{
-		write-host "Подтверждаю, что файл на сервере не обновился"
+		write-host "ГЏГ®Г¤ГІГўГҐГ°Г¦Г¤Г Гѕ, Г·ГІГ® ГґГ Г©Г« Г­Г  Г±ГҐГ°ГўГҐГ°ГҐ Г­ГҐ Г®ГЎГ­Г®ГўГЁГ«Г±Гї"
 		del $DistribPath\temp -Recurse
 	}
 	else
 	{
-		Write-warning "Файл на сервере обновился"
+		Write-warning "Г”Г Г©Г« Г­Г  Г±ГҐГ°ГўГҐГ°ГҐ Г®ГЎГ­Г®ГўГЁГ«Г±Гї"
         try
         {
             Move-Item $DistribPath\temp\$FileName -Destination $DistribPath -Force
