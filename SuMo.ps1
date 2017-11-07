@@ -20,19 +20,19 @@ Add-Type -AssemblyName "System.IO.Compression.FileSystem"
             write-host
         }
 		$destination = "$DistribPath\temp\$FileName"
-        write-host "Скачиваем файл с сервера"
+        write-host "Г‘ГЄГ Г·ГЁГўГ ГҐГ¬ ГґГ Г©Г« Г± Г±ГҐГ°ГўГҐГ°Г "
         $wc = New-Object System.Net.WebClient
         $wc.DownloadFile($DownLoadURL, $destination)
 		$hash1 = Get-FileHash $DistribPath\$FileName -Algorithm MD5 |select -exp hash
 		$hash2 = Get-FileHash $DistribPath\temp\$FileName -Algorithm MD5 |select -exp hash
 		if ($hash1 -eq $hash2)
 		{
-			write-host "Подтверждаю, что файл на сервере не обновился"
+			write-host "ГЏГ®Г¤ГІГўГҐГ°Г¦Г¤Г Гѕ, Г·ГІГ® ГґГ Г©Г« Г­Г  Г±ГҐГ°ГўГҐГ°ГҐ Г­ГҐ Г®ГЎГ­Г®ГўГЁГ«Г±Гї"
 			del $DistribPath\temp -recurse
 		}
 		else
 		{
-			Write-warning "Файл на сервере обновился"
+			Write-warning "Г”Г Г©Г« Г­Г  Г±ГҐГ°ГўГҐГ°ГҐ Г®ГЎГ­Г®ГўГЁГ«Г±Гї"
             try
             {
 				Move-Item $DistribPath\temp\$FileName -Destination $DistribPath -Force
@@ -41,9 +41,9 @@ Add-Type -AssemblyName "System.IO.Compression.FileSystem"
             }
             catch
             {
-                Write-Host "Ошибка распаковки или удаления"
+                Write-Host "ГЋГёГЁГЎГЄГ  Г°Г Г±ГЇГ ГЄГ®ГўГЄГЁ ГЁГ«ГЁ ГіГ¤Г Г«ГҐГ­ГЁГї"
             }
-            Write-Host "Распаковали zip архив"
+            Write-Host "ГђГ Г±ГЇГ ГЄГ®ГўГ Г«ГЁ zip Г Г°ГµГЁГў"
 			pause
 		}
     }
